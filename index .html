@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة اختبارات اللغة العربية - أولى ثانوي</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>body{font-family:'Cairo',sans-serif}</style>
+</head>
+<body class="bg-[#f5f3ff] min-h-screen">
+<div class="max-w-5xl mx-auto p-4">
+
+<div class="flex justify-between items-center bg-white rounded-[20px] p-4 px-6 shadow-sm border mb-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-[#6c5ce7] rounded-xl flex items-center justify-center text-white font-black">ع</div>
+<div><p class="font-black text-[#2d2a5a]">منصة اختبارات اللغة العربية</p><p class="text-[11px] text-gray-500">الصف الأول الثانوي - تصميم: باسم</p></div>
+</div>
+<div id="topScore" class="hidden text-xs bg-[#f1f0ff] px-3 py-2 rounded-full font-bold text-[#6c5ce7]"></div>
+</div>
+
+<div id="page-login" class="bg-white rounded-[32px] shadow-[0_20px_60px_rgba(108,92,231,0.15)] p-8 md:p-12 border text-center">
+<div class="inline-block bg-[#f1f0ff] text-[#6c5ce7] px-4 py-1 rounded-full text-xs font-bold mb-4">اللغة العربية - الصف الأول الثانوي</div>
+<h1 class="text-[38px] md:text-[52px] font-black text-[#2d2a5a] leading-[1.1]">منصة<br><span class="text-[#6c5ce7]">اختبارات اللغة العربية</span></h1>
+<p class="text-gray-500 mt-4 text-[15px]">أسس النجاح | وصية أم لابنتها - اختبارات من صميم المنهج</p>
+<div class="max-w-md mx-auto mt-8">
+<input id="studentName" class="w-full border-2 border-gray-100 rounded-2xl p-4 text-center text-lg font-bold outline-none focus:border-[#6c5ce7]" placeholder="اكتب اسمك">
+<button onclick="enter()" class="w-full mt-4 bg-[#2d2a5a] text-white font-black text-lg py-4 rounded-2xl hover:bg-black transition">ادخل المنصة الآن →</button>
+<p class="text-[11px] text-gray-400 mt-4">إعداد وتصميم: باسم - أولى ثانوي © 2026</p>
+</div>
+</div>
+
+<div id="page-levels" class="hidden">
+<div class="grid md:grid-cols-2 gap-6">
+<div class="bg-white rounded-[28px] p-7 border-2 border-[#6c5ce7]/20 shadow-sm">
+<h3 class="font-black text-2xl text-[#2d2a5a]">المستوى الأول</h3>
+<p class="font-bold text-[#6c5ce7] mt-1">15 سؤال - الأساسيات</p>
+<p class="text-sm text-gray-500 mt-3">اختياري + صح وغلط + مقالي - من نصوص الكتاب</p>
+<button onclick="openLevel(1)" class="w-full mt-6 bg-[#6c5ce7] text-white font-black py-4 rounded-2xl">ابدأ المستوى الأول</button>
+</div>
+<div id="card2" class="bg-white rounded-[28px] p-7 border shadow-sm opacity-60">
+<h3 class="font-black text-2xl">المستوى الثاني</h3>
+<p class="font-bold text-gray-500 mt-1">20 سؤال - المتفوقين</p>
+<p id="badge2" class="text-sm text-gray-500 mt-3">🔒 مقفول - لازم 95% في الأول</p>
+<button id="btnLevel2" disabled onclick="openLevel(2)" class="w-full mt-6 bg-gray-300 text-white font-black py-4 rounded-2xl">مقفول حالياً</button>
+</div>
+</div>
+</div>
+
+<div id="page-quiz" class="hidden bg-white rounded-[28px] p-6 md:p-8 border shadow-sm">
+<div class="flex justify-between items-center"><button onclick="goHome()" class="text-sm border px-4 py-2 rounded-full">← الرئيسية</button><span id="progress" class="text-sm font-black bg-[#2d2a5a] text-white px-4 py-2 rounded-full"></span></div>
+<div class="mt-3 w-full bg-gray-100 h-2 rounded-full"><div id="bar" class="h-full bg-[#6c5ce7] transition-all" style="width:0%"></div></div>
+<h2 id="qText" class="font-black text-[21px] leading-8 mt-6 text-[#2d2a5a]"></h2>
+<div id="options" class="mt-6 grid gap-3"></div>
+<div class="flex justify-between mt-8"><button id="prev" onclick="prev()" class="px-6 py-3 border-2 rounded-xl font-bold">السابق</button><button id="next" onclick="next()" class="px-8 py-3 bg-[#6c5ce7] text-white rounded-xl font-black">التالي</button></div>
+</div>
+
+<div id="page-result" class="hidden"></div>
+
+<div class="text-center mt-8 pb-4"><p class="text-xs text-gray-400">تصميم وبرمجة: <b class="text-[#2d2a5a]">باسم</b> | الصف الأول الثانوي</p></div>
+</div>
+
+<script>
+const QUESTIONS={
+1:[
+{q:"ما الحكاية التي بدأ بها كاتب 'أسس النجاح'؟",o:["قصة تاجرين","قصة ملك","قصة طالب","قصة فلاح"],a:0,e:"بدأ بقصة تاجرين ليوضح الجد والتواكل."},
+{q:"معنى 'رذائل':",o:["صفات حسنة","صفات قبيحة مذمومة","أموال","علوم"],a:1,e:"رذيلة = صفة قبيحة، عكسها فضيلة."},
+{q:"مضاد 'لبق':",o:["فصيح","أحمق","ذكي","سريع"],a:1},
+{q:"'يرتكز' معناها:",o:["يعتمد","يهرب","ينام","يضحك"],a:0},
+{q:"'المتمقل' معناها:",o:["المتقلب","الثابت","الذكي","الغني"],a:0},
+{q:"'الغافل' عكسها:",o:["النائم","اليقظ المنتبه","الكسلان","الفقير"],a:1},
+{q:"'ذخرا' معناها:",o:["ما يُدخر للحاجة","طعام فاسد","مال حرام","كتاب"],a:0},
+{q:"صاحبة وصية أم لابنتها:",o:["أمامة بنت الحارث","الخنساء","خديجة","عائشة"],a:0},
+{q:"'الوكر' معناها:",o:["بيت الطائر وبيت الزوجية","مكان العمل","السجن","السوق"],a:0},
+{q:"'العش' استعارة عن:",o:["بيت الزوجية","عش طيور حقيقي","المدرسة","المسجد"],a:0},
+{q:"'القناعة كنز لا يفنى' تدل على:",o:["الرضا","الطمع","إهانة الزوج","لا معنى"],a:0},
+{q:"النجاح يعتمد على الحظ فقط.",t:"tf",a:false,e:"النجاح بالجد والعمل."},
+{q:"من أسس النجاح: تحديد الهدف.",t:"tf",a:true},
+{q:"اشرح: 'التفقد لموضع عينه وأنفه'",t:"essay",k:["نظافة","جمال","رائحة","اهتمام"],m:"الاهتمام بالنظافة والزينة فلا يقع نظره إلا على جميل ولا يشم إلا طيب."},
+{q:"ما علاقة 'تواتر الجوع ملهبة'؟",t:"essay",k:["جوع","غضب","طعام","وقت"],m:"لا تطلبي الطعام في غير وقته فالجوع يلهب ويغضب."},
+],
+2:[
+{q:"لماذا استخدم قصة التاجرين؟",o:["للتسلية","لإثبات أن الجد أساس النجاح","لبيع بضاعة","لا هدف"],a:1},
+{q:"جمال 'العش' و 'الوكر':",o:["تشبيه","استعارة تصريحية شبه البيت بالعش","كناية","لا جمال"],a:1},
+{q:"'التفقد لموضع أنفه' نوعها:",o:["كناية عن النظافة","استعارة مكنية","تشبيه","طباق"],a:0},
+{q:"'الفرح' و 'الكآبة' بينهما:",o:["سجع","طباق","جناس","تورية"],a:1},
+{q:"الوصايا العشر فيها:",o:["طباق","سجع يعطي جرس موسيقي","جناس","لا يوجد"],a:1},
+{q:"'العشير' معناها:",o:["الزوج","الصديق","الجار","الأب"],a:0},
+{q:"'أي بنية' أسلوب:",o:["تهديد","تحبب وقرب","سخرية","غضب"],a:1},
+{q:"العلاقة بين الدرسين:",o:["لا علاقة","كلاهما عن أسس النجاح","ضد بعض","قصص"],a:1},
+{q:"'يرتكز النجاح' إعراب النجاح:",o:["فاعل","مفعول به","مبتدأ","خبر"],a:0},
+{q:"جمع 'فضيلة':",o:["فضائل","فضيلات","فضول","أفضال"],a:0},
+{q:"الغافل يرتكز على الجد.",t:"tf",a:false},
+{q:"الوصية تدعو لإفشاء السر.",t:"tf",a:false},
+{q:"الوكر والعش مترادفان.",t:"tf",a:true},
+{q:"الطموح بلا عمل ينجح.",t:"tf",a:false},
+{q:"حلل: 'كوني له أمة يكن لك عبدا'",t:"essay",k:["مقابلة","طاعة","حب","تواضع"],m:"مقابلة بين أمة وعبداً تدل على التواضع المتبادل."},
+{q:"هل القناعة تتعارض مع الطموح؟",t:"essay",k:["قناعة","طموح","رضا","سعي"],m:"لا تتعارض، القناعة رضا مع سعي، والطموح سعي للأفضل."},
+{q:"دليل حكمة أمامة بنت الحارث؟",t:"essay",k:["خبرة","حكمة","ترتيب","شمول"],m:"شمول الوصايا العشر وترتيبها وخبرتها."},
+{q:"اشرح: التفريط في المال",t:"essay",k:["مال","اسراف","حفظ","تدبير"],m:"الإهمال في حفظ مال الزوج يضيع الأسرة."},
+{q:"كيف تطبق أسس النجاح كطالب أولى ثانوي؟",t:"essay",k:["مذاكرة","هدف","وقت","جد"],m:"تحديد هدف التفوق وتنظيم الوقت والجد."},
+{q:"اذكر 3 وصايا مع شرحها.",t:"essay",k:["قناعة","طاعة","نظافة","سر"],m:"القناعة، حفظ السر، النظافة."},
+]
+};
+let name="",lvl=1,list=[],i=0,ans={};
+function enter(){let v=document.getElementById('studentName').value.trim();if(v.length<2){alert('اكتب اسمك');return}name=v;localStorage.setItem('arabic_pro_name',v);document.getElementById('page-login').classList.add('hidden');document.getElementById('page-levels').classList.remove('hidden');refreshTop();}
+function refreshTop(){let d=JSON.parse(localStorage.getItem('scores_'+name)||'{}');let t=document.getElementById('topScore');if(d.l1||d.l2){t.classList.remove('hidden');t.innerText=`${name} | أول: ${d.l1||'-'}% | ثاني: ${d.l2||'-'}%`;}if(d.l1>=95){document.getElementById('card2').classList.remove('opacity-60');document.getElementById('badge2').innerText='✅ مفتوح - دوس ابدأ';document.getElementById('btnLevel2').disabled=false;document.getElementById('btnLevel2').className='w-full mt-6 bg-[#2d2a5a] text-white font-black py-4 rounded-2xl';}}
+function goHome(){document.getElementById('page-quiz').classList.add('hidden');document.getElementById('page-result').classList.add('hidden');document.getElementById('page-levels').classList.remove('hidden');refreshTop();}
+function openLevel(l){lvl=l;list=QUESTIONS[l];i=0;ans={};document.getElementById('page-levels').classList.add('hidden');document.getElementById('page-quiz').classList.remove('hidden');show();}
+function show(){let q=list[i];document.getElementById('progress').innerText=`سؤال ${i+1} / ${list.length}`;document.getElementById('bar').style.width=`${((i+1)/list.length*100)}%`;document.getElementById('qText').innerText=q.q;let box=document.getElementById('options');box.innerHTML='';if(q.t!=='tf'&&q.t!=='essay'){q.o.forEach((op,idx)=>{let b=document.createElement('button');b.className=`w-full text-right border-2 rounded-2xl p-4 font-bold ${ans[i]===idx?'border-[#6c5ce7] bg-[#f1f0ff]':'border-gray-100 bg-white hover:border-[#6c5ce7]/40'}`;b.innerHTML=`${['أ','ب','ج','د'][idx]}- ${op}`;b.onclick=()=>{ans[i]=idx;show();};box.appendChild(b);});}else if(q.t==='tf'){box.className='mt-6 grid grid-cols-2 gap-3';[true,false].forEach(v=>{let b=document.createElement('button');b.className=`border-2 rounded-2xl p-4 font-black ${ans[i]===v?'border-[#6c5ce7] bg-[#f1f0ff]':'border-gray-100 bg-white'}`;b.innerText=v?'صح ✅':'خطأ ❌';b.onclick=()=>{ans[i]=v;show();};box.appendChild(b);});}else{box.className='mt-6 grid gap-3';box.innerHTML=`<textarea id="ea" rows="5" class="w-full border-2 rounded-2xl p-4 outline-none focus:border-[#6c5ce7]" placeholder="اكتب إجابتك...">${ans[i]||''}</textarea><button onclick="saveEssay()" class="bg-[#2d2a5a] text-white px-6 py-2 rounded-xl text-sm font-bold">حفظ</button>`;}document.getElementById('prev').style.visibility=i==0?'hidden':'visible';document.getElementById('next').innerText=i==list.length-1?'إنهاء وعرض النتيجة':'التالي →';}
+function saveEssay(){ans[i]=document.getElementById('ea').value;alert('تم الحفظ');}
+function prev(){if(i>0){i--;show();}}
+function next(){let ea=document.getElementById('ea');if(ea)ans[i]=ea.value;if(i<list.length-1){i++;show();}else final();}
+function final(){let score=0,html='';list.forEach((q,idx)=>{let u=ans[idx];let ok=false;if(q.t==='tf')ok=u===q.a;else if(q.t==='essay'){let txt=(u||'').toLowerCase();let hit=q.k.filter(k=>txt.includes(k)).length;ok=hit>=2||txt.length>35;}else ok=u===q.a;if(ok)score++;let userTxt=q.t==='tf'?(u===true?'صح':u===false?'خطأ':'لم تجب'):q.t==='essay'?(u||'لم تجب'):(q.o[u]||'لم تجب');let rightTxt=q.t==='tf'?(q.a?'صح':'خطأ'):q.t==='essay'?q.m:q.o[q.a];html+=`<div class="border-2 rounded-2xl p-4 mb-3 ${ok?'border-green-200 bg-green-50':'border-red-200 bg-red-50'}"><p class="font-bold">${idx+1}. ${q.q}</p><p class="text-sm mt-2">إجابتك: <b>${userTxt}</b></p><p class="text-sm">الصح: <b class="text-green-700">${rightTxt}</b></p><p class="text-xs mt-2 bg-white/70 p-2 rounded-xl">${q.e||q.m}</p></div>`;});let perc=Math.round(score/list.length*100);let d=JSON.parse(localStorage.getItem('scores_'+name)||'{}');if(lvl==1)d.l1=perc;else d.l2=perc;localStorage.setItem('scores_'+name,JSON.stringify(d));document.getElementById('page-quiz').classList.add('hidden');let res=document.getElementById('page-result');res.classList.remove('hidden');res.innerHTML=`<div class="bg-white rounded-[28px] p-8 border shadow-sm text-center"><div class="w-24 h-24 mx-auto rounded-full flex items-center justify-center text-3xl font-black ${perc>=95?'bg-green-500 text-white':'bg-[#2d2a5a] text-white'}">${perc}%</div><h2 class="font-black text-3xl mt-4">${perc>=95?'ممتاز يا '+name+' 🎉':'حاول تاني يا '+name}</h2><p class="text-gray-500 mt-2">${score} من ${list.length}</p><div class="grid grid-cols-2 gap-3 mt-6"><button onclick="goHome()" class="border-2 py-3 rounded-xl font-black">الرئيسية</button><button onclick="openLevel(${lvl})" class="bg-[#6c5ce7] text-white py-3 rounded-xl font-black">إعادة</button></div></div><div class="bg-white rounded-[28px] p-6 border shadow-sm mt-6"><h3 class="font-black text-xl mb-4">المراجعة المفصلة:</h3>${html}</div><p class="text-center text-xs text-gray-400 mt-6">تصميم: باسم - أولى ثانوي</p>`;window.scrollTo(0,0);}
+window.onload=()=>{let s=localStorage.getItem('arabic_pro_name');if(s)document.getElementById('studentName').value=s;}
+</script>
+</body>
+</html>
